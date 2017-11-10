@@ -1,6 +1,7 @@
 from pymongo import MongoClient
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, request, redirect
 import settings
+import io
 
 client = MongoClient(settings.MONGO_URI)
 
@@ -9,13 +10,23 @@ collection = db.textbooks
 
 app = Flask(__name__)
 
-@app.route("/")
+DEFAULTS = {
+    'data': 'hello world'
+}
+
+@app.route("/", methods=['GET', 'POST'])
 def hello():
-    textbooks = []
-    for textbook in collection.find():
-        print(textbook)
-        textbooks.append(textbook)
-    return jsonify(len(textbooks))
+    return render_template("upload.html")
+
+@app.route("/textbooknew", methods=['POST'])
+def handle_csv():
+    text = request.form['isbn']
+    toc_data = request.files['toc_file']
+    toc_stream = io.StringIO(toc_data.stream.read().decode('UTF-8'), newline=None)
+    csv_input = csv.reader(toc_stream)
+    print('Some text was returned: ' + text)
+    print(csv_input)
+    return redirect("/")
 
 if __name__ == "__main__":
     # Only for debugging while developing
