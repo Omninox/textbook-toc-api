@@ -1,7 +1,9 @@
 from pymongo import MongoClient
 from flask import Flask, jsonify, render_template, request, redirect
 import settings
-import io
+# import io
+import csv
+import scripts
 
 client = MongoClient(settings.MONGO_URI)
 
@@ -22,10 +24,16 @@ def hello():
 def handle_csv():
     text = request.form['isbn']
     toc_data = request.files['toc_file']
-    toc_stream = io.StringIO(toc_data.stream.read().decode('UTF-8'), newline=None)
-    csv_input = csv.reader(toc_stream)
-    print('Some text was returned: ' + text)
-    print(csv_input)
+    Contents = scripts.TOC(toc_data)
+    Contents.populate()
+    print(Contents.chapters)
+    # print(toc_data)
+    # toc_stream = io.StringIO(toc_data.stream.read().decode('Unicode'), newline=None)
+    # csv_input = csv.reader(toc_data)
+    # for row in csv_input:
+    #     print(row)
+    # print('Some text was returned: ' + text)
+    # print(csv_input)
     return redirect("/")
 
 if __name__ == "__main__":
