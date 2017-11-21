@@ -1,2 +1,5 @@
 settings*
 assets
+*.pyc
+__pycache__
+tb

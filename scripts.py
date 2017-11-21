@@ -10,13 +10,13 @@ db = client['textbookTOCs']
 collection = db.textbooks
 
 class TOC:
-    def __init__(self, file):
+    def __init__(self, file_name):
         self.raw_data = []
-        # with open(file, 'rU') as csvfile:
+        with open('./assets/' + file_name, 'rU') as csvfile:
             # Toc_reader=csvfile.read()
-        toc_reader = csv.reader(file, delimiter=",")
-        for row in toc_reader:
-            self.raw_data.append(row)
+            toc_reader = csv.reader(csvfile, delimiter=",")
+            for row in toc_reader:
+                self.raw_data.append(row)
 
     def populate(self):
         self.chapters = {}
@@ -71,23 +71,38 @@ class TOC:
                     # Add chapter number to unit's list of chapters
                     self.units[active_unit]['chapters'].append(chapter_number)
 
+statistics = TOC('stats.csv')
+statistics.populate()
+print("-------------First printing units-----------")
+print(statistics.units)
+print("-------------Now printing chapters-----------")
+print(statistics.chapters)
+print("-------------Finally, sections...-----------")
+print(statistics.sections)
 
+zumdahl = TOC('Chemistry_Zumdahl.csv')
+zumdahl.populate()
+print("-------------First printing units-----------")
+print(zumdahl.units)
+print("-------------Now printing chapters-----------")
+print(zumdahl.chapters)
+print("-------------Finally, sections...-----------")
+print(zumdahl.sections)
 
-# ____EXAMPLES____
-# statistics = TOC('stats.csv')
-# statistics.populate()
-# print("-------------First printing units-----------")
-# print(statistics.units)
-# print("-------------Now printing chapters-----------")
-# print(statistics.chapters)
-# print("-------------Finally, sections...-----------")
-# print(statistics.sections)
+stewart = TOC('stewart_calculus.csv')
+stewart.populate()
+print("-------------First printing units-----------")
+print(stewart.units)
+print("-------------Now printing chapters-----------")
+print(stewart.chapters)
+print("-------------Finally, sections...-----------")
+print(stewart.sections)
 
-# zumdahl = TOC('Chemistry_Zumdahl.csv')
-# zumdahl.populate()
-# print("-------------First printing units-----------")
-# print(zumdahl.units)
-# print("-------------Now printing chapters-----------")
-# print(zumdahl.chapters)
-# print("-------------Finally, sections...-----------")
-# print(zumdahl.sections)
+biology = TOC('biology.csv')
+biology.populate()
+print("-------------First printing units-----------")
+print(biology.units)
+print("-------------Now printing chapters-----------")
+print(biology.chapters)
+print("-------------Finally, sections...-----------")
+print(biology.sections)
